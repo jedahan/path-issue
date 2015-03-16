@@ -1,11 +1,13 @@
-fireworks
+# kinectFireworks
 
-heres the modified script:
-
+For BGC Interface Experience
 
 ## welcome screen
+
   Background shows shooting fireworks
-  Text says "Welcome to Kinect Fireworks! Please make sure you are standing in the panel marked on the floor. When you're ready, hold your hand in from of the screen to register with the kinect"
+
+  Text says **Welcome to Kinect Fireworks! Please make sure you are standing in the panel marked on the floor. When you're ready, hold your hand in from of the screen to register with the kinect**
+
   Video shows someone performing the described action
 
 ### interstitial
@@ -16,7 +18,7 @@ heres the modified script:
 
   "Hover over 'next' to continue"
 
-### play screen
+## instruction screen
  
    * Background black
    * Color pallete near bottom
@@ -30,8 +32,24 @@ heres the modified script:
    * Voice Commands
      * yelling the color changes it
 
+   "Perform the following actions"
+
+   - shoot a firework up
+   - change color
+   - shoot a firework sideways
+   - shoot 2 fireworks
+
+   With a video for each one when its done
+
+### interstitial
+
+  "Congrats, now time to make your own show!"
    
-#### Feature priority
+## play screen
+
+  Do the same as the instruction screen but no instructions
+
+# Feature priority
 
   - Hand tracking via kinect
   - Creation of 'fireworks' near moving hand
@@ -42,6 +60,8 @@ heres the modified script:
   - Show recording
   - Voice recognition
 
-#### Screen priority
+# Screen priority
 
-  
+  1. Play
+  2. Welcome
+  3. Instructions
