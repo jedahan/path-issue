@@ -20,9 +20,17 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+    void explode(int x, int y);
 		
     vector<Circle> circles;
     bool pointInCircle(int pX, int pY, Circle c);
+    Circle * whichCircle();
     ofColor selectedColor;
-    ofShader shader;
+    ofShader shader, explodeshader;
+    ofPolyline line;
+    vector<ofMesh> fireworks;
+
+    bool select;
+    float startTime;
+    float endTime;
 };
