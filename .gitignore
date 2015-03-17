@@ -5,3 +5,5 @@ bin/libs/
 fireworks.cbp
 fireworks.workspace
 obj/
+.ycm_extra_conf.py
+.ycm_extra_conf.pyc
