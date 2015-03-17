@@ -18,11 +18,8 @@ void ofApp::update(){
   if(s){
     ofPoint p = ofPoint(s->x,s->y);
     float r = s->r+20;
-    float pct = (ofGetElapsedTimeMillis()-startTime)/MS_FOR_SELECTION;
-    if(pct > 0.02){
-      line.moveTo(p);
-      line.arc(p,r,r,0,360*pct);
-    }
+    line.moveTo(p);
+    line.arc(p,r,r,0,360);
   }
 }
 

@@ -11,13 +11,12 @@ class ofApp : public ofBaseApp{
 		void update();
 		void draw();
 
-		void mouseMoved(int x, int y );
 		void windowResized(int w, int h);
 		
     bool pointInCircle(int pX, int pY, Circle c);
+    Circle * whichCircle();
 
     vector<Circle> circles;
-    Circle * whichCircle();
     ofPath line;
 
 };
