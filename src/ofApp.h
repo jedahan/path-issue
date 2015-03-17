@@ -27,7 +27,7 @@ class ofApp : public ofBaseApp{
     Circle * whichCircle();
     ofColor selectedColor;
     ofShader shader, explodeshader;
-    ofPolyline line;
+    ofPath line;
     vector<ofMesh> fireworks;
 
     bool select;

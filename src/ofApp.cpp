@@ -6,24 +6,39 @@ void ofApp::setup(){
   int w = ofGetViewportWidth();
   int h = ofGetViewportHeight();
   ofEnableSmoothing();
-  ofSetCircleResolution(128);
+  ofSetCircleResolution(180);
   circles.push_back(Circle(ofColor(0,255,255), 2 * w/6, h/2, 100));
   circles.push_back(Circle(ofColor(255,0,255), 3 * w/6, h/2, 100));
   circles.push_back(Circle(ofColor(255,255,0), 4 * w/6, h/2, 100));
   selectedColor = circles[0].c;
-  shader.load("shaders/noise");
-  explodeshader.load("shaders/explode");
   ofBackground(0);
   ofGetWindowPtr()->setWindowTitle("fireworks");
   startTime = endTime = -1;
+  line.setStrokeWidth(1);
+  line.setCircleResolution(180);
 }
 
 void ofApp::update(){
-
+  line.clear();
+  Circle * s = whichCircle();
+  if(s){
+    ofPoint p = ofPoint(s->x,s->y);
+    float r = s->r+20;
+    float pct = (ofGetElapsedTimeMillis()-startTime)/MS_FOR_SELECTION;
+    if(pct > 0.02){
+      line.moveTo(p);
+      line.arc(p,r,r,0,360*pct);
+    }
+  }
+  if(endTime > 0 && ofGetElapsedTimeMillis() >= endTime){
+    ofMessage msg(ofToString("selected"));
+    ofSendMessage(msg);
+  }
 }
 
 void ofApp::draw(){
- 
+  line.draw();
+
   for(Circle c : circles){
     ofSetColor(c.c);
     ofDrawCircle(c.x,c.y,c.r,c.r);
@@ -31,23 +46,8 @@ void ofApp::draw(){
   ofSetColor(selectedColor);
   ofDrawRectangle(mouseX-10,mouseY-10,20,20);
  
-  explodeshader.begin();
-  explodeshader.setUniform1f("mouseRange", 150);
-  explodeshader.setUniform2f("mouse", mouseX - ofGetWidth()/2, ofGetHeight()/2-mouseY );
-  explodeshader.setUniform4f("v_color", selectedColor.r/255, selectedColor.g/255, selectedColor.b/255, 1.0);
   for(ofMesh firework : fireworks){
     firework.drawVertices();
-  }
-  explodeshader.end();
-
-  Circle * c = whichCircle();
-  if(c){
-    ofDrawCircle(c->x,c->y,c->r+20,c->r+20); 
-  }
-  if(endTime > 0 && ofGetElapsedTimeMillis() >= endTime){
-    startTime = endTime = -1;
-    ofMessage msg(ofToString("selected"));
-    ofSendMessage(msg);
   }
 }
 
@@ -60,12 +60,11 @@ void ofApp::keyReleased(int key){
 }
 
 void ofApp::mouseMoved(int x, int y){
-  if(whichCircle()) {
-    if(startTime > 0){
-      startTime = ofGetElapsedTimeMillis();
-      endTime = startTime + MS_FOR_SELECTION;
-    }
-  } else {
+  if(whichCircle() && startTime < 0) {
+    startTime = ofGetElapsedTimeMillis();
+    endTime = startTime + MS_FOR_SELECTION;
+  }
+  if(! whichCircle() && endTime > 0){
     startTime = endTime = -1;
   }
 }
@@ -74,7 +73,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 }
 
 Circle * ofApp::whichCircle() {
-  for(int i=0; i < circles.size(); i++){
+  for(int i=0; i < (int)circles.size(); i++){
     if(pointInCircle(mouseX,mouseY,circles[i])){
       return &circles[i];
     }
@@ -98,14 +97,7 @@ void ofApp::explode(int x, int y){
 }
 
 void ofApp::mousePressed(int x, int y, int button){
-  bool hitCircle = false;
-  for(Circle c : circles) {
-    if(pointInCircle(x,y,c)) {
-      selectedColor = c.c;
-      hitCircle = true;
-    }
-  }
-  if (!hitCircle) {
+  if (!whichCircle()) {
     explode(x,y);
   }
 }
@@ -124,7 +116,7 @@ void ofApp::windowResized(int w, int h){
 }
 
 void ofApp::gotMessage(ofMessage msg) {
-  cout << "Got message " + msg.message << endl;
+  selectedColor = whichCircle()->c;
 }
 
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
